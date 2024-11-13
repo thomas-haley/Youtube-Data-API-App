@@ -9,5 +9,5 @@ public class AppUser
     public required byte[] PasswordSalt {get; set;}
 
     public bool DataUploaded {get; set;} = false;
-    public bool AllowUpload {get; set;} = false;
+    public bool AllowUpload {get; set;} = true;
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { UserSessionService } from '../../_services/user-session.service';
 
 @Component({
   selector: 'app-session-home',
@@ -8,5 +9,8 @@ import { Component } from '@angular/core';
   styleUrl: './session-home.component.css'
 })
 export class SessionHomeComponent {
-
+  sessionService = inject(UserSessionService);
+  constructor(){
+    this.sessionService.getSessionFlags().subscribe();
+  }
 }

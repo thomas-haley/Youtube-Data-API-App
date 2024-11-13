@@ -1,4 +1,4 @@
 export interface SessionFlags {
-    username: string;
-    token: string;
+    AllowUpload: boolean;
+    DataUploaded: boolean;
 }

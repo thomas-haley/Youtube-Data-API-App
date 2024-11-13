@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { SessionFlags } from '../_models/sessionFlags';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +10,16 @@ import { SessionFlags } from '../_models/sessionFlags';
 export class UserSessionService {
   private http = inject(HttpClient)
   baseUrl = environment.apiUrl;
-  
+  sessionFlags = signal<SessionFlags | null>(null);
 
 
-  getSessionFlags(){
-    return this.http.get<SessionFlags>(this.baseUrl + "users/getFlags")
+  getSessionFlags<SessionFlags>(){
+    console.log("getting flags")
+    return this.http.get<SessionFlags>(this.baseUrl + "session/flags").pipe(
+      map(flags => {
+        console.log(flags);
+      })
+    )
   }
 
 }

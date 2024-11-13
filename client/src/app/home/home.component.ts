@@ -10,4 +10,5 @@ import { SessionHomeComponent } from './session-home/session-home.component';
 })
 export class HomeComponent {
   accountService = inject(AccountService);
+
 }
