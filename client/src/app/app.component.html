@@ -1,9 +1,4 @@
-<h1>{{title}}</h1>
-<ul>
-    @for (user of users; track user.id) {
-        <li>
-            {{user.id}} - {{user.username}}
-        </li>
-    }
-    
-</ul>
+<app-nav></app-nav>
+<div id="app-cont" class="container">
+    <router-outlet></router-outlet>
+</div>

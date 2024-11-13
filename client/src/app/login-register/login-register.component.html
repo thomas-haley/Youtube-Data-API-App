@@ -1,0 +1,39 @@
+<main class="form-signin">
+    @if(accountService.loginMode()){
+        <form (ngSubmit)="login()">
+            <h1 class="h3 mb-3 fw-normal text-center">Sign in</h1>
+        
+            <div class="form-floating my-2">
+              <input type="text" class="form-control" [(ngModel)]="model.username" name="username" id="floatingInput" placeholder="ABC123">
+              <label for="floatingInput">Username</label>
+            </div>
+            <div class="form-floating my-2">
+              <input type="password" name="password" [(ngModel)]="model.password" class="form-control" id="floatingPassword" placeholder="Password">
+              <label for="floatingPassword">Password</label>
+            </div>
+        
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+        </form>
+    } @else {
+        <form (ngSubmit)="register()">
+            <h1 class="h3 mb-3 fw-normal">Register a new account</h1>
+        
+            <div class="form-floating my-2">
+              <input type="text" name="username"  [(ngModel)]="model.username" class="form-control" id="floatingInput" placeholder="ABC123">
+              <label for="floatingInput">Username</label>
+            </div>
+            <div class="form-floating my-2">
+              <input type="password" name="password" [(ngModel)]="model.password" class="form-control" id="floatingPassword" placeholder="Password">
+              <label for="floatingPassword">Password</label>
+            </div>
+        
+            <div class="checkbox mb-3">
+              <label>
+                <input type="checkbox" value="account-agree"> I agree to not fully waste what little API budget the developer has
+              </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+        </form>
+    }
+</main>
+

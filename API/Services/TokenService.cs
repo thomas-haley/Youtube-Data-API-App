@@ -19,6 +19,7 @@ public class TokenService(IConfiguration config) : ITokenService
 
         var claims = new List<Claim>
         {
+            new Claim("id", user.Id.ToString()),
             new Claim(ClaimTypes.NameIdentifier, user.Username)
         };
 

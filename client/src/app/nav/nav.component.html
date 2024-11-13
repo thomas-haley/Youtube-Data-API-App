@@ -1,0 +1,29 @@
+<nav id="app-nav" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Y2H - Youtube History Helper</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a routerLink="/faq" class="nav-link active" href="#">FAQ</a>
+          </li>
+        </ul>
+        @if(!accountService.currentUser()){
+          <div class="space-between">
+            <a class="btn btn-outline-success mx-2" (click)="login()" type="submit">Login</a>
+            <a class="btn btn-outline-success mx-2" (click)="register()" type="submit">Register</a>
+          </div>
+        }
+        @if(accountService.currentUser()){
+            <form #logoutForm="ngForm" (ngSubmit)="logout()" class="d-flex">
+                <button class="btn btn-outline-success" type="submit">Logout</button>
+            </form>
+        }
+        <form (ngSubmit)="test()" class="d-flex">
+          <button class="btn btn-outline-danger" type="submit">Test</button>
+        </form>
+      </div>
+    </div>
+  </nav>
