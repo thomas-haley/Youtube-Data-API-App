@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers;
 
 /**
-    TestController contains endpoints that return various http codes to facilitate testing client error handling
+    ErrorController contains endpoints that return various http codes to facilitate testing client error handling
 */
 
-public class TestController(DataContext context) : BaseAPIController
+public class ErrorController(DataContext context) : BaseAPIController
 {
 
 

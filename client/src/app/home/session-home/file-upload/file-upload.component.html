@@ -1,7 +1,7 @@
 <div class="bg-light p-5 rounded">
     <h1>Upload Watch History</h1>
-    <form #watchUploadForm="ngForm" class="d-flex">
-        <input type="file" class="file-upload">
+    <form #watchUploadForm="ngForm" (ngSubmit)="upload()" class="d-flex">
+        <input type="file" (change)="onChange($event)" class="file-upload">
         <button type="submit">Upload</button>
     </form>
   </div>

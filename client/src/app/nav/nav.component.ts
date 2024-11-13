@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { User } from '../_models/user';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ErrorService } from '../_services/error.service';
 @Component({
   selector: 'app-nav',
   standalone: true,
@@ -12,6 +13,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class NavComponent {
   accountService = inject(AccountService);
+  errorService = inject(ErrorService);
   private router = inject(Router);
   model: any = {};
   login(){
@@ -25,8 +27,7 @@ export class NavComponent {
   }
 
   test(){
-    console.log("here")
-    this.accountService.test();
+    this.errorService.queueTest();
   }
 
   logout(){

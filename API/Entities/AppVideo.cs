@@ -16,4 +16,8 @@ public class AppVideo
 
     public List<string>? Topics{get; set;}//From API
 
+    public bool Queued {get; set;} = true;
+
+    public bool Retrieved {get; set;} = false;
+
 }

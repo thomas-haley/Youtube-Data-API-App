@@ -12,4 +12,6 @@ public class AppUserVideos
 
     public required int VideoId {get; set;}
     public required AppVideo Video {get; set;}
+
+    public required DateOnly Watched {get; set;}
 }

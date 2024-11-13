@@ -1,6 +1,12 @@
 <nav id="app-nav" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#">Y2H - Youtube History Helper</a>
+      @if(accountService.currentUser()){
+        <!--If logged in, navigate to dash-->
+        <a class="navbar-brand" href="dash">Y2H - Youtube History Helper</a>
+      } @else {
+        <a class="navbar-brand" href="#">Y2H - Youtube History Helper</a>
+      }
+      
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
