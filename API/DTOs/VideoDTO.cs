@@ -8,6 +8,6 @@ public class VideoDTO
     public required string Title {get; set;}
     public required string ChannelId {get; set;}
     public required string ChannelName {get; set;}
-    public required DateOnly Watched {get; set;} 
+    public required DateTime Watched {get; set;} 
     
 }

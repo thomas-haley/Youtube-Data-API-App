@@ -36,7 +36,7 @@ public class AccountController(IUnitOfWork unitOfWork, ITokenService tokenServic
     public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
     {
         var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(loginDTO.Username);
-
+    
        if (user == null) return BadRequest("Invalid User");
        using var hmac = new HMACSHA512(user.PasswordSalt);
        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.Password));
