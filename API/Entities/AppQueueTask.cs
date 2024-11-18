@@ -2,8 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities;
 
-[Table("QueueTask")]
-public class QueueTask 
+public class AppQueueTask 
 {
     public int Id { get; set; }
     public required AppUser User { get; set; } 
@@ -12,7 +11,7 @@ public class QueueTask
     public List<string>? Channels {get; set;}
     public List<string>? Categories {get; set;}
     public int EstimatedTokens {get; set;}
-    public required bool Queued {get; set;} = true;
-    public required bool Canceled {get; set;} = false;
-    public required bool Completed {get; set;} = true;
+    public bool Queued {get; set;} = false;
+    public bool Canceled {get; set;} = false;
+    public bool Completed {get; set;} = true;
 }

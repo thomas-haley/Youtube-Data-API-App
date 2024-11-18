@@ -10,4 +10,5 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     public DbSet<AppCategory> Categories {get; set;}
     public DbSet<AppVideo> Videos {get; set;}
     public DbSet<AppUserVideos> UserVideos {get; set;}
+    public DbSet<AppQueueTask> QueueTasks {get; set;}
 }

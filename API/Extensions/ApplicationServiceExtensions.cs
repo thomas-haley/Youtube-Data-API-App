@@ -18,6 +18,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserVideoRepository, UserVideoRepository>();
+        services.AddScoped<IQueueRepository, QueueRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IHTMLFileParser, HTMLFileParser>();

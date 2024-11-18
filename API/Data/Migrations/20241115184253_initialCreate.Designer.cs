@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace API.Data.Migrations
+namespace DataMigrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241112205926_FixedOneToOnev2")]
-    partial class FixedOneToOnev2
+    [Migration("20241115184253_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,47 @@ namespace API.Data.Migrations
                     b.ToTable("Channel");
                 });
 
+            modelBuilder.Entity("API.Entities.AppQueueTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Canceled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Categories")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Channels")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EstimatedTokens")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Queued")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TaskType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Videos")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QueueTasks");
+                });
+
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
                     b.Property<int>("Id")
@@ -101,6 +142,9 @@ namespace API.Data.Migrations
                     b.Property<int>("VideoId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("Watched")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -129,6 +173,12 @@ namespace API.Data.Migrations
                     b.Property<DateTime?>("Published")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Queued")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Retrieved")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -143,6 +193,17 @@ namespace API.Data.Migrations
                     b.HasIndex("ChannelId");
 
                     b.ToTable("Video");
+                });
+
+            modelBuilder.Entity("API.Entities.AppQueueTask", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Entities.AppUserVideos", b =>

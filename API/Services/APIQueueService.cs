@@ -1,3 +1,5 @@
+using System.Reflection;
+using API.DTOs;
 using API.Interfaces;
 
 namespace API.Services;
@@ -22,7 +24,8 @@ public class APIQueueService(ILogger<APIQueueService> _logger, IAPIQueue TaskQue
                 await TaskQueue.DequeueAsync(stoppingToken);
 
             try
-            {
+            {                
+                _logger.LogInformation($"Dequeued work item");
                 await workItem(stoppingToken);
             }
             catch (Exception ex)
@@ -32,6 +35,7 @@ public class APIQueueService(ILogger<APIQueueService> _logger, IAPIQueue TaskQue
             }
         }
     }
+
 
     public override async Task StopAsync(CancellationToken stoppingToken)
     {
