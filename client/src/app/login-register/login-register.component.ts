@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-register',
@@ -14,13 +15,14 @@ export class LoginRegisterComponent {
   accountService = inject(AccountService)
   model: any = {};
   private router = inject(Router);
+  private toaster = inject(ToastrService);
   login(){
     console.log(this.model)
     this.accountService.login(this.model).subscribe({
       next: response => {
-        this.router.navigateByUrl("");
+        this.router.navigateByUrl("dash");
       },
-      error: error => alert(error)
+      error: error => this.toaster.error(error.error)
     })
   }
 
@@ -29,7 +31,7 @@ export class LoginRegisterComponent {
       next: response => {
         console.log(response)
       },
-      error: error => alert(error)
+      error: error => this.toaster.error(error.error)
     })
   }
 }

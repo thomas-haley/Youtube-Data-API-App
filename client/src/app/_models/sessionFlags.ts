@@ -1,4 +1,4 @@
 export interface SessionFlags {
-    AllowUpload: boolean;
-    DataUploaded: boolean;
+    allowUpload: boolean;
+    dataUploaded: boolean;
 }

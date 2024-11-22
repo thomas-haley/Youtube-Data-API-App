@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { UserSessionService } from '../../_services/user-session.service';
+import { FileUploadComponent } from "./file-upload/file-upload.component";
 
 @Component({
   selector: 'app-session-home',
   standalone: true,
-  imports: [],
+  imports: [FileUploadComponent],
   templateUrl: './session-home.component.html',
   styleUrl: './session-home.component.css'
 })

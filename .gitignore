@@ -486,3 +486,6 @@ API/appsettings.json
 .vscode/settings.json
 client/ssl/localhost-key.pem
 client/ssl/localhost.pem
+/API/Properties
+API/Properties/launchSettings.json
+API/Properties/launchSettings.json

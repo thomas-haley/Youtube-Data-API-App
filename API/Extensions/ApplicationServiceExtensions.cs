@@ -16,6 +16,30 @@ public static class ApplicationServiceExtensions
         });
         services.AddCors();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserVideoRepository, UserVideoRepository>();
+        services.AddScoped<IQueueRepository, QueueRepository>();
+        services.AddScoped<IVideoRepository, VideoRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IChannelRepository, ChannelRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IYoutubeAPIService, YoutubeAPIService>();
+        services.AddScoped<IHTMLFileParser, HTMLFileParser>();
+
+        //API Task queue
+        services.AddHostedService<APIQueueService>();
+        services.AddScoped<IAPIQueueBuilder, APIQueueBuilder>();
+
+        services.AddSingleton<IAPIQueue>(
+            ctx => 
+            {
+                if(!int.TryParse(config["QueueCapacity"], out var queueCapacity))
+                    queueCapacity = 10;
+                return new APIQueue(queueCapacity);
+            }
+        );
+
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         return services;
     }
 }

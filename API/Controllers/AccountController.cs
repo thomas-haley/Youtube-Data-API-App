@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
-public class AccountController(DataContext context, ITokenService tokenService) : BaseAPIController
+public class AccountController(IUnitOfWork unitOfWork, ITokenService tokenService) : BaseAPIController
 {
     [HttpPost("register")]
     public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDto)
@@ -22,8 +22,10 @@ public class AccountController(DataContext context, ITokenService tokenService) 
             PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
             PasswordSalt = hmac.Key
         };
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        var userCreated = unitOfWork.UserRepository.CreateUser(user);
+        
+        if(!await unitOfWork.Complete()) throw new Exception("Unable to create user at this time");
+
         return new UserDTO{
             Username = user.Username,
             Token = tokenService.CreateToken(user)
@@ -33,8 +35,8 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     [HttpPost("login")]
     public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
     {
-       var user = await context.Users.FirstOrDefaultAsync(user => user.Username == loginDTO.Username.ToLower());
-
+        var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(loginDTO.Username);
+    
        if (user == null) return BadRequest("Invalid User");
        using var hmac = new HMACSHA512(user.PasswordSalt);
        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.Password));
@@ -50,7 +52,8 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     }
 
     private async Task<bool> UserExists(string username){
-        return await context.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower());
+        return await unitOfWork.UserRepository.GetUserByUsernameAsync(username) != null;
+        
     }
 
 }

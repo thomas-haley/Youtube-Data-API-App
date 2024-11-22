@@ -1,15 +1,13 @@
-using API.Data;
 using API.DTOs;
-using API.Entities;
+using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace API.Controllers;
 
 [Authorize]
-public class SessionController(DataContext context) : BaseAPIController
+public class SessionController(IUserRepository userRepository, IMapper mapper) : BaseAPIController
 {
 
     //Update to get session flags for client
@@ -21,14 +19,10 @@ public class SessionController(DataContext context) : BaseAPIController
 
         var id = Int32.Parse(idString);
 
-        var user = await context.Users.FirstOrDefaultAsync(user => user.Id == id);
+        var user = await userRepository.GetUserByIdAsync(id);
 
         if(user == null) return BadRequest("Unable to load user session flags");
-
-        return new SessionDTO{
-            AllowUpload = user.AllowUpload,
-            DataUploaded = user.DataUploaded
-        };
+        return mapper.Map<SessionDTO>(user);
     }
 
 

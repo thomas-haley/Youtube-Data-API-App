@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { NavComponent } from "./nav/nav.component";
 import { AccountService } from './_services/account.service';
 import { HomeComponent } from "./home/home.component";
+import { ErrorService } from './_services/error.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { HomeComponent } from "./home/home.component";
 })
 export class AppComponent implements OnInit{
   http = inject(HttpClient)
+  errorService = inject(ErrorService)
   private accountService = inject(AccountService);
   
   title = 'Youtube Data App';
@@ -22,6 +24,7 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.setCurrentUser();
+    // this.errorService.getValidationError();
   }
 
 
