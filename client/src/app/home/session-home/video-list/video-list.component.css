@@ -1,0 +1,33 @@
+
+
+
+th{
+    max-width: 5vw;
+}
+
+th.header-false{
+    /* min-width: 5vw; */
+    max-width: 5vw;
+}
+
+td{
+    max-width: 5vw;
+    align-content: center;
+}
+
+td img{
+    max-height: 100%;
+    max-width: 100%;
+
+}
+
+div.channel-thumbnail{
+	display:grid;
+	align-items:center;
+	justify-items:center;
+}
+
+img.channel-thumbnail{
+	border-radius: 50%;
+	width: 25%;
+}

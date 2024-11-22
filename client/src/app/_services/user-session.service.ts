@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { SessionFlags } from '../_models/sessionFlags';
 import { map } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { UserVideoData } from '../_models/userVideoData';
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class UserSessionService {
   sessionFlags = signal<SessionFlags | null>(null);
   allowUpload = signal<boolean>(false);
   dataUploaded = signal<boolean>(false);
-  userVideoData = signal<UserVideoData[] | null>(null);
+
   getSessionFlags(){
 
     return this.http.get<SessionFlags>(this.baseUrl + "session/flags").pipe(
@@ -40,15 +40,7 @@ export class UserSessionService {
   }
 
 
-  getUserVideos(id: number){
-    return this.http.get<UserVideoData[]>(this.baseUrl + "users/"+ id +"/videos").pipe(
-      map(userVideoData => {
-        if(userVideoData){
-          this.userVideoData.set(userVideoData);
-        }
-      })
-    )
-  }
+
 
   
 

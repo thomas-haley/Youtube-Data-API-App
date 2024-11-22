@@ -1,15 +1,80 @@
+<div>
+    <!--Bar above table holding options for table setup, filtering, and pagination-->
+
+</div>
+<!-- <div class="table"> -->
+
+    <table class="table">
+        @if(this.tableHeaders() != null && videoDataService.paginatedResult() != null)
+        {
+            <thead>
+                <tr>
+                    @for(header of this.tableHeaders(); track $index)
+                    {
+                        <th scope="col" class="{{getLastPathKey(header.location)}} header-{{header.visibleInHeader.valueOf()}}">
+                        @if(header.visibleInHeader){
+                            <p>{{header.name}}</p>    
+                        }
+                        </th>     
+                    }
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @for(video of videoDataService.paginatedResult()!.items; track $index){
+                    <tr>
 
 
 
-@if(userSessionService.userVideoData() != null){
-    <button (click)="test()">test</button>
-    @if(testSrc != null)
-    {
-        <img src={{testSrc()}}>
-    }
-    
-    @for(video of userSessionService.userVideoData()!; track $index)
-    {
-        
-    }
-}
+
+
+
+                    @if(!tableHeaders() )
+                    {
+                        Loading
+                    } @else {
+                        @for(headerValue of tableHeaders(); track $index)
+                        {
+ 
+                            <td class="{{getLastPathKey(headerValue.location)}}">
+                                @switch (getLastPathKey(headerValue.location)) {
+                                    @case ("thumbnail") {
+                                        <div class="{{getThumbnailCSSClass(headerValue.location)}}">
+                                            <img class="{{getThumbnailCSSClass(headerValue.location)}}" src="{{getNestedValue(video, headerValue.location)}}">
+                                        </div>
+                                    }
+                                    @default {
+                                        {{getNestedValue(video, headerValue.location)}}                      
+                                    }
+                                }
+                            </td>
+                            
+
+                        }
+                    }
+
+
+                    </tr>
+
+
+
+
+
+
+
+
+
+
+
+                    <!-- <tr > -->
+                    <!-- <app-video-list-item [stringIndex]="i.toString()" [headersString]="stringifyHeaders()"></app-video-list-item> -->
+                    <!-- </tr> -->
+
+
+                    <!-- <app-video-list-item stringIndex={{$index}}  headersString={{stringifyHeaders()}}></app-video-list-item> -->
+                    <!-- </tr> -->
+                }
+            </tbody>
+        }
+    </table>
+<!-- </div> -->
