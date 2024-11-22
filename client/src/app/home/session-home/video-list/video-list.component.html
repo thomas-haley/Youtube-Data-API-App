@@ -1,1 +1,15 @@
-<p>video-list works!</p>
+
+
+
+@if(userSessionService.userVideoData() != null){
+    <button (click)="test()">test</button>
+    @if(testSrc != null)
+    {
+        <img src={{testSrc()}}>
+    }
+    
+    @for(video of userSessionService.userVideoData()!; track $index)
+    {
+        
+    }
+}

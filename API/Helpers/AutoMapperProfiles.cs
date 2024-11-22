@@ -14,5 +14,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<AppUser, UserDataDTO>();
         CreateMap<QueueDTO, UserQueueDataDTO>();
         CreateMap<AppQueueTask, UserQueueDataDTO>();
+        CreateMap<AppUserVideos, UserVideoDataDTO>();
+        CreateMap<AppChannel, ChannelDataDTO>();
+        CreateMap<AppVideo, VideoDataDTO>(); //Sets up mapping for nested ChannelDataDTO within VideoDataDTO
+        CreateMap<AppCategory, CategoryDataDTO>();
     }
 }

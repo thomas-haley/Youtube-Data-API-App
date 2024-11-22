@@ -1,12 +1,15 @@
 using System;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class UserVideoRepository(DataContext context) : IUserVideoRepository
+public class UserVideoRepository(DataContext context, IMapper mapper) : IUserVideoRepository
 {
     private bool channelShellCreated = false;
     private bool videoShellCreated = false;
@@ -77,4 +80,11 @@ public class UserVideoRepository(DataContext context) : IUserVideoRepository
         return await this.ChannelExistsByAPIID(apiID);
     }
 
+        public async Task<PagedList<UserVideoDataDTO>> GetUserVideosAsync(UserVideoParams userVideoParams, int userID)
+    {   
+        var query = context.UserVideos.Include(uv => uv.Video.Channel).Include(uv => uv.Video.Category).Where(uv => uv.User.Id == userID).Distinct().ProjectTo<UserVideoDataDTO>(mapper.ConfigurationProvider);
+
+
+        return await PagedList<UserVideoDataDTO>.CreateAsync(query, userVideoParams.PageNumber, userVideoParams.PageSize);
+    }
 }

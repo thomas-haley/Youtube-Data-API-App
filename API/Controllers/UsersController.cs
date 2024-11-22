@@ -1,5 +1,7 @@
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -76,8 +78,10 @@ public class UsersController(IUnitOfWork unitOfWork, IHTMLFileParser fileParser,
 
     [AllowAnonymous]
     [HttpGet("{id:int}/videos")]
-    public async Task<List<int>> GetUsersVideos(int id)
+    public async Task<ActionResult<IEnumerable<UserVideoDataDTO>>> GetUsersVideos([FromQuery]UserVideoParams userVideoParams, int id)
     {
-        return await unitOfWork.VideoRepository.GetUserVideosAsync(id);
+        var userVideos =  await unitOfWork.UserVideoRepository.GetUserVideosAsync(userVideoParams, id);
+        Response.AddPaginationHeader(userVideos);
+        return Ok(userVideos);
     }
 }
