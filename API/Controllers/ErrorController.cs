@@ -1,5 +1,6 @@
 using API.Data;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace API.Controllers;
     ErrorController contains endpoints that return various http codes to facilitate testing client error handling
 */
 
-public class ErrorController(DataContext context) : BaseAPIController
+public class ErrorController(IYoutubeAPIService youtubeAPIService) : BaseAPIController
 {
 
 
@@ -45,5 +46,13 @@ public class ErrorController(DataContext context) : BaseAPIController
         throw new Exception("Test endpoint");
     }
 
+
+    //Internal Server Error
+    [HttpGet("test")]
+    public ActionResult TestEndpoint(){
+        youtubeAPIService.ListVideos([]);
+        return Ok();
+        // throw new Exception("Test endpoint");
+    }
 
 }

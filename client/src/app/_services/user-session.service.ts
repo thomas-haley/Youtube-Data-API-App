@@ -13,12 +13,16 @@ export class UserSessionService {
   toaster = inject(ToastrService);
   baseUrl = environment.apiUrl;
   sessionFlags = signal<SessionFlags | null>(null);
+  allowUpload = signal<boolean>(false);
+  dataUploaded = signal<boolean>(false);
+  getSessionFlags(){
 
-  getSessionFlags<SessionFlags>(){
-    console.log("getting flags")
     return this.http.get<SessionFlags>(this.baseUrl + "session/flags").pipe(
-      map(flags => {
-        console.log(flags);
+      map(sessionFlags => {
+          if(sessionFlags){
+            this.sessionFlags.set(sessionFlags);
+          }
+          
       })
     )
   }
@@ -30,8 +34,10 @@ export class UserSessionService {
         error: error => this.toaster.error(error),
         complete: () => this.getSessionFlags()
       }
-    )
-    
+    ) 
   }
+
+
+  
 
 }

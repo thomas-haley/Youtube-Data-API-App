@@ -15,6 +15,11 @@
           <li class="nav-item">
             <a routerLink="/faq" class="nav-link active" href="#">FAQ</a>
           </li>
+          @if(accountService.currentUser()){
+            <li class="nav-item">
+              <a routerLink="/tasks" class="nav-link active" href="#">Tasks</a>
+            </li>
+          }
         </ul>
         @if(!accountService.currentUser()){
           <div class="space-between">

@@ -13,5 +13,5 @@ public class AppQueueTask
     public int EstimatedTokens {get; set;}
     public bool Queued {get; set;} = false;
     public bool Canceled {get; set;} = false;
-    public bool Completed {get; set;} = true;
+    public bool Completed {get; set;} = false;
 }

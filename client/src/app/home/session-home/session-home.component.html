@@ -1,2 +1,16 @@
 <p>session-home works!</p>
-<app-file-upload></app-file-upload>
+
+@if(sessionService.sessionFlags() != null){
+    @if(sessionService.sessionFlags()?.dataUploaded){
+        <!--Banner showing quick stats, banner should be customizable within itself-->
+
+
+
+
+        <!--Video List for user, should be filterable by itself-->
+    } @else {
+        <app-file-upload></app-file-upload>
+    }
+
+
+}

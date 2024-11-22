@@ -1,0 +1,5 @@
+@if(this.queueService.usersWithTasks() != null){
+    @for (user of this.queueService.usersWithTasks(); track $index) {
+        <app-user-tasks-bar [userID]="user.Id" [userName]="user.Username"></app-user-tasks-bar>
+    }
+}

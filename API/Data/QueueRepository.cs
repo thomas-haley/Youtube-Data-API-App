@@ -11,8 +11,8 @@ public class QueueRepository(DataContext context, IMapper mapper) : IQueueReposi
 {
 
     
-    public const int MaxBatchSizeVideo = 100;
-    public const int MaxBatchSizeChannel = 10;
+    public const int MaxBatchSizeVideo = 50;
+    public const int MaxBatchSizeChannel = 5;
 
     public async void CreateTaskFromDTOs(List<QueueDTO> queueItems){
         foreach(QueueDTO queueItem in queueItems){
@@ -87,8 +87,8 @@ public class QueueRepository(DataContext context, IMapper mapper) : IQueueReposi
     }
 
 
-    public List<UserDataDTO>? GetUsersWithTasks(){
-        var usersWithTasks = context.QueueTasks.Select(qt => qt.User).Distinct().ToList();
+    public List<UserDataDTO>? GetUsersWithTasksToQueue(){
+        var usersWithTasks = context.QueueTasks.Where(qt => !qt.Completed && !qt.Canceled && !qt.Queued).Select(qt => qt.User).Distinct().ToList();
         if (usersWithTasks == null) return [];
 
         List<UserDataDTO> output = [];
@@ -100,36 +100,55 @@ public class QueueRepository(DataContext context, IMapper mapper) : IQueueReposi
     }
 
 
-    public List<UserQueueDataDTO>? GetTasksDataByUserID(int id){
+    public List<UserQueueDataDTO>? GetTasksDataByUserID(int id, bool includeCanceled = false, bool includeComplete = false){
         var queueTasks = context.QueueTasks.Where(qt => qt.User.Id == id);
+        if(!includeCanceled){
+            queueTasks = queueTasks = queueTasks.Where(qt => !qt.Canceled);
 
+        }
         if(queueTasks == null) return null;
 
-        return [.. queueTasks.Select(qt =>     new UserQueueDataDTO{
-            Id = qt.Id,
-            User = mapper.Map<UserDataDTO>(qt.User),
-            TaskType = qt.TaskType,
-            Videos = qt.Videos,
-            Channels = qt.Channels,
-            Categories = qt.Categories
+        if(!includeComplete){
+            queueTasks = queueTasks = queueTasks.Where(qt => !qt.Completed);
+
+        }
+        if(queueTasks == null) return null;
+
+        return [.. queueTasks.Select(queueTask =>     new UserQueueDataDTO{
+            Id = queueTask.Id,
+            User = mapper.Map<UserDataDTO>(queueTask.User),
+            TaskType = queueTask.TaskType,
+            Videos = queueTask.Videos,
+            Channels = queueTask.Channels,
+            Categories = queueTask.Categories,
+            Canceled = queueTask.Canceled,
+            Completed = queueTask.Completed
         })];
 
     }
 
-    public List<AppQueueTask>? GetTasksByUserID(int id){
+    public List<AppQueueTask>? GetTasksByUserID(int id, bool includeCanceled = false, bool includeComplete = false){
         var queueTasks = context.QueueTasks.Where(qt => qt.User.Id == id);
+        if(!includeCanceled){
+            queueTasks = queueTasks = queueTasks.Where(qt => !qt.Canceled);
 
+        }
         if(queueTasks == null) return null;
+
+        if(!includeComplete){
+            queueTasks = queueTasks = queueTasks.Where(qt => !qt.Completed);
+
+        }
 
         return queueTasks.ToList();
 
     }
 
-
+ 
     public async Task<UserQueueDataDTO?> GetTaskDataByID(int id){
         var queueTask = await context.QueueTasks.SingleOrDefaultAsync(qt => qt.Id == id);
 
-        if(queueTask == null) return null;
+        if (queueTask == null) return null;
 
         return new UserQueueDataDTO{
             Id = queueTask.Id,
@@ -137,7 +156,9 @@ public class QueueRepository(DataContext context, IMapper mapper) : IQueueReposi
             TaskType = queueTask.TaskType,
             Videos = queueTask.Videos,
             Channels = queueTask.Channels,
-            Categories = queueTask.Categories
+            Categories = queueTask.Categories,
+            Canceled = queueTask.Canceled,
+            Completed = queueTask.Completed
         };
 
         
@@ -162,5 +183,13 @@ public class QueueRepository(DataContext context, IMapper mapper) : IQueueReposi
             taskDTOs.Add(mapper.Map<UserQueueDataDTO>(task));
         }
         return taskDTOs;
+    }
+
+    public void CancelTasks(List<AppQueueTask> tasks){
+        foreach(AppQueueTask task in tasks){
+            task.Canceled = true;
+            task.Completed = false;
+            task.Queued = false;
+        }
     }
 }

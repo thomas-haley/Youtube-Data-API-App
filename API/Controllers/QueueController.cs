@@ -10,18 +10,11 @@ namespace API.Controllers;
 public class QueueController(IUnitOfWork unitOfWork, IAPIQueueBuilder queueBuilder, IMapper mapper) : BaseAPIController
 {
 
-    //Update to get session flags for client
-    [HttpGet("add")]
-    public async Task<ActionResult> AddToQueue(){
-        await queueBuilder.BuildWorkItem();
-        return Ok();
-    }
-
 
     [AllowAnonymous]
     [HttpGet("user-tasks")]
     public ActionResult<List<UserDataDTO>?> GetUsersWithTasks(){
-        return unitOfWork.QueueRepository.GetUsersWithTasks();
+        return unitOfWork.QueueRepository.GetUsersWithTasksToQueue();
     }
 
 
@@ -30,11 +23,11 @@ public class QueueController(IUnitOfWork unitOfWork, IAPIQueueBuilder queueBuild
     [AllowAnonymous]
     [HttpGet("user-tasks/{id:int}")]
     public ActionResult<List<UserQueueDataDTO>?> GetTasksForUserID(int id){
-        return unitOfWork.QueueRepository.GetTasksDataByUserID(id);
+        return unitOfWork.QueueRepository.GetTasksDataByUserID(id, false, false);
     }
 
     [AllowAnonymous]
-    [HttpGet("user-tasks/{id:int}/start")]
+    [HttpPost("user-tasks/{id}/start")]
     public async Task<ActionResult> TriggerTasksByUserID(int id){
 
         var tasks = unitOfWork.QueueRepository.GetTasksByUserID(id);
@@ -53,10 +46,61 @@ public class QueueController(IUnitOfWork unitOfWork, IAPIQueueBuilder queueBuild
     }
 
     [AllowAnonymous]
+    [HttpPost("user-tasks/{id}/cancel")]
+    public async Task<ActionResult> CancelTasksByUserID(int id){
+
+        var tasks = unitOfWork.QueueRepository.GetTasksByUserID(id);
+        if(tasks == null) return BadRequest();
+
+        unitOfWork.QueueRepository.CancelTasks(tasks);
+
+        await unitOfWork.Complete();
+        
+        return Ok();
+    }
+
+
+    [AllowAnonymous]
+    [HttpPost("tasks/{id}/start")]
+    public async Task<ActionResult> TriggerTaskByID(int id){
+        var task = await unitOfWork.QueueRepository.GetTaskByID(id);
+        List<UserQueueDataDTO> taskDTO = unitOfWork.QueueRepository.StartTasks([task]);
+        if(taskDTO.Count != 1) return BadRequest();
+        await unitOfWork.Complete();
+
+        await queueBuilder.BuildWorkItemFromDTO(taskDTO.First<UserQueueDataDTO>());
+        return Ok();
+    }
+
+
+    [AllowAnonymous]
+    [HttpPost("tasks/{id}/cancel")]
+    public async Task<ActionResult> CancelTaskByID(int id){
+        var task = await unitOfWork.QueueRepository.GetTaskByID(id);
+        unitOfWork.QueueRepository.CancelTasks([task]);
+        await unitOfWork.Complete();
+
+        return Ok();
+    }
+
+
+
+
+
+
+
+
+
+
+
+    [AllowAnonymous]
     [HttpGet("tasks/{id:int}")]
     public async Task<ActionResult<UserQueueDataDTO?>> GetTaskDataByID(int id){
         return await unitOfWork.QueueRepository.GetTaskDataByID(id);
     }
+
+
+
 
 
     

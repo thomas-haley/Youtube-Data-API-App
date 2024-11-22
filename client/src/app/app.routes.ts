@@ -4,6 +4,7 @@ import { LoginRegisterComponent } from './login-register/login-register.componen
 import { FaqComponent } from './faq/faq.component';
 import { SessionHomeComponent } from './home/session-home/session-home.component';
 import { authGuard } from './_guards/auth.guard';
+import { TasksViewComponent } from './home/session-home/tasks-view/tasks-view.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -12,6 +13,7 @@ export const routes: Routes = [
 
     //Logged in routes
     {path: 'dash', component: SessionHomeComponent, canActivate: [authGuard]},
+    {path: 'tasks', component: TasksViewComponent, canActivate: [authGuard]},
 
 
     {path: '**', component: HomeComponent, pathMatch: "full"}, //Eventual 404 page

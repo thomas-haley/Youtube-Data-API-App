@@ -19,8 +19,11 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserVideoRepository, UserVideoRepository>();
         services.AddScoped<IQueueRepository, QueueRepository>();
+        services.AddScoped<IVideoRepository, VideoRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IChannelRepository, ChannelRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+        services.AddScoped<IYoutubeAPIService, YoutubeAPIService>();
         services.AddScoped<IHTMLFileParser, HTMLFileParser>();
 
         //API Task queue

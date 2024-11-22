@@ -16,14 +16,16 @@ public interface IQueueRepository
 
 
     //Admin task loading logic
-    public List<UserDataDTO>? GetUsersWithTasks();
+    public List<UserDataDTO>? GetUsersWithTasksToQueue();
 
-    public List<UserQueueDataDTO>? GetTasksDataByUserID(int id);
-    public List<AppQueueTask>? GetTasksByUserID(int id);
+    public List<UserQueueDataDTO>? GetTasksDataByUserID(int id, bool includeCanceled = false, bool includeComplete = false);
+    public List<AppQueueTask>? GetTasksByUserID(int id, bool includeCanceled = false, bool includeComplete = false);
 
     public Task<UserQueueDataDTO?> GetTaskDataByID(int id);
     public Task<AppQueueTask?> GetTaskByID(int id);
 
     public List<UserQueueDataDTO> StartTasks(List<AppQueueTask> tasks);
+
+    public void CancelTasks(List<AppQueueTask> tasks);
     
 }

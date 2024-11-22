@@ -12,4 +12,7 @@ public class UserQueueDataDTO
     public List<string>? Channels {get; set;}
     public List<string>? Categories {get; set;}
 
+    public required bool Canceled {get; set;}
+    public required bool Completed {get; set;}
+
 }

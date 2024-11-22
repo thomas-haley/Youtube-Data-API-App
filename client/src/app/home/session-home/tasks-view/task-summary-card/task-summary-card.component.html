@@ -1,0 +1,21 @@
+@if(this.queueItem != null){
+    <div class="card" style="width: 18rem;">
+        <div class="card-id-list overflow-y-scroll ">
+            @if(this.idList() != null){
+                @for(id of this.idList(); track $index){
+                    <p>{{id}}</p>
+                }
+            }
+        </div>
+        
+        <div class="card-body">
+          <h5 class="card-title">Task #{{queueItem.id.toString()}}</h5>
+          <p class="card-text">Task Type: {{queueItem.taskType}}</p>
+          <div class="d-flex w-100 space-between">
+              <button (click)="cancelTask()" class="btn btn-danger ">Cancel Task</button>
+              <button (click)="startTask()"  class="btn btn-success">Start Task</button>
+
+          </div>
+        </div>
+      </div>
+}

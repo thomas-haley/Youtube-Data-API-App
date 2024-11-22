@@ -15,9 +15,11 @@ public class AppVideo
     public int? CategoryId{get; set;}//From API
 
     public List<string>? Topics{get; set;}//From API
+    public string? Thumbnail {get; set;}//From API
 
     public bool Queued {get; set;} = true;
 
     public bool Retrieved {get; set;} = false;
+
 
 }
