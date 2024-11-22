@@ -21,7 +21,7 @@ public class YoutubeAPIService : IYoutubeAPIService
     }
 
     public VideoListResponse ListVideos(List<string> videos){
-        var request = _youtubeAPI.Videos.List(new Repeatable<string>(["contentDetails", "snippet", "topicDetails"]));
+        var request = _youtubeAPI.Videos.List(new Repeatable<string>(["contentDetails", "snippet", "topicDetails", "statistics"]));
         request.Id = new Repeatable<string>(videos);
 
         var response = request.Execute();

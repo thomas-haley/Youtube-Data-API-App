@@ -1,6 +1,7 @@
 using System;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces;
 
@@ -11,4 +12,6 @@ public interface IUserVideoRepository
     void Update(AppUserVideos user);
 
     bool CreateUserVideo(AppUserVideos user);
+
+    Task<PagedList<UserVideoDataDTO>> GetUserVideosAsync(UserVideoParams userVideoParams, int userID);
 }

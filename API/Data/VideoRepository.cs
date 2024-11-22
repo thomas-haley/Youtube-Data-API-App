@@ -1,13 +1,15 @@
 using System;
+using System.Diagnostics;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class VideoRepository(DataContext context) : IVideoRepository
+public class VideoRepository(DataContext context, IMapper _mapper) : IVideoRepository
 {
     public void Update(AppVideo video)
     {
@@ -19,6 +21,11 @@ public class VideoRepository(DataContext context) : IVideoRepository
             return true;
         }
         return false;
+    }
+
+    public async Task<AppVideo?> GetByIdAsync(int id)
+    {
+        return await context.Videos.SingleOrDefaultAsync(video => video.Id == id);
     }
 
     public async Task<AppVideo?> GetByApiIdAsync(string apiID)
@@ -41,16 +48,23 @@ public class VideoRepository(DataContext context) : IVideoRepository
             if(thumbnail != null){
                 dbVideo.Thumbnail = thumbnail.Url;
             }
+        
+            if(videoItem.Statistics != null) {
+                dbVideo.Views = videoItem.Statistics.ViewCount.ToString();
+            }
+
+            if(videoItem.ContentDetails != null) {
+                dbVideo.Duration = videoItem.ContentDetails.Duration;
+            }
+
             dbVideo.Queued = false;
             dbVideo.Retrieved = true;
+            dbVideo.DataFetched = new DateTime().ToUniversalTime();
             this.Update(dbVideo);
         }
 
         return true;
     }
 
-    public async Task<List<int>> GetUserVideosAsync(int userID)
-    {
-        return await context.UserVideos.Where(uv => uv.User.Id == userID).Select(uv => uv.Video.Id).ToListAsync();
-    }
+
 }
