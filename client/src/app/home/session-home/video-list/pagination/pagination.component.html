@@ -4,7 +4,13 @@
             <button>Filters</button>
         </div>
         <div id="header-settings-button-cont">
-            <button (click)="triggerOnTableSettingsClick()">Settings</button>
+            @if(!this.isEditingTable)
+            {
+                <button class="settings-btn btn btn-warning" (click)="triggerOnTableSettingsClick()">Edit Table</button>
+            }@else{
+                <button class="settings-btn btn btn-danger" (click)="triggerOnTableSettingsClick()">Stop Editing</button>
+                <button class="settings-btn  btn btn-primary" (click)="this.videoDataService.addHeaderColumn()">Add Column</button>
+            }
         </div>
         <div id="results-per-page-cont">
             <div class="pagination-helper-text">
@@ -39,18 +45,18 @@
             <div id="page-change-button-cont">
                 <div id="page-change-button-cont-back">
                     @if(!isFirst()){
-                        <button (click)="firstPage()">|<</button>         
+                        <button class="table-pagi-btn btn btn-primary" (click)="firstPage()"><i class="bi-skip-start-fill"></i></button>         
                     }
                     @if(hasPrev()){
-                        <button (click)="prevPage()"><</button>         
+                        <button class="table-pagi-btn btn btn-primary mirror-x" (click)="prevPage()"><i class="bi-play-fill"></i></button>         
                     }
                 </div>
                 <div id="page-change-button-cont-fore">
                     @if(hasNext()){
-                        <button (click)="nextPage()">></button>         
+                        <button class="table-pagi-btn btn btn-primary" (click)="nextPage()"><i class="bi-play-fill"></i></button>         
                     }
                     @if(!isLast()){
-                        <button (click)="lastPage()">>|</button>         
+                        <button class="table-pagi-btn btn btn-primary" (click)="lastPage()"><i class="bi-skip-end-fill"></i></button>         
                     }
                 </div>
             </div>

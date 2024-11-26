@@ -75,4 +75,15 @@ export class VideoListComponent {
     this.allowHeaderEdit.set(!this.allowHeaderEdit());
   }
 
+  parseTopic(topicURL: string)
+  {
+    console.log(topicURL);
+    var splitTopic = topicURL.split("/");
+    console.log(splitTopic);
+    var topic = splitTopic[splitTopic.length - 1];
+    console.log(topic);
+    topic = topic.replace("_", " ")
+    return topic;
+  }
+
 }

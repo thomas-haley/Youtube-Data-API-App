@@ -11,6 +11,7 @@ export class PaginationComponent {
   @Output() onPaginationDataUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onTableSettingsClick: EventEmitter<any> = new EventEmitter();
   @Input() updateDataCallback!: Function;
+  @Input() isEditingTable!: boolean;
   videoDataService = inject(VideoDataService);
 
   resultsPerPageOpts = [5, 10, 25, 50, 100];

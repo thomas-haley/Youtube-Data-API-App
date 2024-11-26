@@ -58,3 +58,19 @@ select{
     background-color: #5762e552;
 
 }
+
+.settings-btn{
+    margin: 0px 4px 0px 4px;
+    font-size: 12px;
+}
+
+.table-pagi-btn{
+    margin: 0px 4px 0px 4px
+}
+
+.mirror-x{
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+}

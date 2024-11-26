@@ -1,0 +1,17 @@
+.editable-header-action-container div
+{
+    display: flex;
+    justify-content: center;
+    margin: 4px 0px 4px 0px;
+}
+
+.editable-header-button-container button
+{
+    margin: 0px 8px 0px 8px;
+}
+
+.header-move-btn-cont, .trash-button
+{
+    min-width: 42px;
+    min-height: 42px;
+}

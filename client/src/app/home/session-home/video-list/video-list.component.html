@@ -1,6 +1,6 @@
 <div class="mt-2 mb-2">
     <!--Bar above table holding options for table setup, filtering, and pagination-->
-    <app-pagination (onTableSettingsClick)="toggleHeaderEditFlag()" (onPaginationDataUpdate)="loadUserVideo()">
+    <app-pagination [isEditingTable]="this.allowHeaderEdit()"  (onTableSettingsClick)="toggleHeaderEditFlag()" (onPaginationDataUpdate)="loadUserVideo()">
 
     </app-pagination>
 
@@ -19,7 +19,7 @@
                             @if(this.allowHeaderEdit())
                             {
                                 <th>
-                                    <app-editable-table-header headerIndexString={{$index}}></app-editable-table-header>
+                                    <app-editable-table-header  id="editable-test-{{$index}}"  headerIndexString={{$index}}></app-editable-table-header>
                                 </th>
                             } @else {
                                 <th scope="col" class="{{getLastPathKey(header.location)}} header header-{{header.visibleInHeader.valueOf()}}">
@@ -58,6 +58,20 @@
                                                         <img src="{{getNestedValue(video, headerValue.location)}}">
                                                     </div>
                                                 }
+                                                @case("topics"){
+                                                    @if(getNestedValue(video, headerValue.location) == null){
+                                                        <div>
+                                                            N/A
+                                                        </div>
+                                                    } @else {
+                                                        @for(topic of getNestedValue(video, headerValue.location); track $index)
+                                                        {
+                                                            <div>
+                                                                <a target="_blank" href="{{topic}}">{{this.parseTopic(topic)}}</a>@if($index + 1 < getNestedValue(video, headerValue.location).length){,}
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
                                                 @default {
                                                     {{getNestedValue(video, headerValue.location)}}                      
                                                 }
@@ -69,6 +83,20 @@
                                                 <div>
                                                     <img src="{{getNestedValue(video, headerValue.location)}}">
                                                 </div>
+                                            }
+                                            @case("topics"){
+                                                @if(getNestedValue(video, headerValue.location) == null){
+                                                    <div>
+                                                        N/A
+                                                    </div>
+                                                } @else {
+                                                    @for(topic of getNestedValue(video, headerValue.location); track $index)
+                                                    {
+                                                        <div>
+                                                            <a target="_blank" href="{{topic}}">{{this.parseTopic(topic)}}</a>@if($index + 1 < getNestedValue(video, headerValue.location).length){,}
+                                                        </div>
+                                                    }
+                                                }
                                             }
                                             @default {
                                                 {{getNestedValue(video, headerValue.location)}}                      
