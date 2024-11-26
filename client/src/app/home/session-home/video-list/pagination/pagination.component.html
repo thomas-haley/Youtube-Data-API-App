@@ -1,0 +1,79 @@
+<div class="p-2" id="pagination-row">
+    <div class="left-just" id="left-span">
+        <div id="filters-button-cont">
+            <button>Filters</button>
+        </div>
+        <div id="header-settings-button-cont">
+            <button (click)="triggerOnTableSettingsClick()">Settings</button>
+        </div>
+        <div id="results-per-page-cont">
+            <div class="pagination-helper-text">
+                Results per page:
+            </div>
+            <select (change)="updateResultsPerPage($event)">
+                @for(resultOpt of this.resultsPerPageOpts; track $index)
+                    {
+                        @if(resultOpt == this.videoDataService.pageSize())
+                        {
+
+                            <option value={{resultOpt}} selected>{{resultOpt}}</option>
+                        } @else {
+                            <option value={{resultOpt}}>{{resultOpt}}</option>
+                        }
+                    }
+            </select>
+        </div>
+    </div>
+
+    <div class="right-just" id="right-span">
+        
+            <div class="pagination-helper-text" id="page-count-display-cont">
+                @if(videoDataService.paginatedResult() != null)
+                {
+                    <!--Mut be written out in the template to update automatically with the pagination signal updates-->
+                    Videos {{((this.videoDataService.paginatedResult()!.pagination?.currentPage! - 1) * this.videoDataService.paginatedResult()!.pagination?.itemsPerPage!) + 1}}
+                    -{{this.videoDataService.paginatedResult()!.pagination?.currentPage! * this.videoDataService.paginatedResult()!.pagination?.itemsPerPage!}}
+                    out of {{this.videoDataService.paginatedResult()!.pagination!.totalItems}}
+                }
+            </div>
+            <div id="page-change-button-cont">
+                <div id="page-change-button-cont-back">
+                    @if(!isFirst()){
+                        <button (click)="firstPage()">|<</button>         
+                    }
+                    @if(hasPrev()){
+                        <button (click)="prevPage()"><</button>         
+                    }
+                </div>
+                <div id="page-change-button-cont-fore">
+                    @if(hasNext()){
+                        <button (click)="nextPage()">></button>         
+                    }
+                    @if(!isLast()){
+                        <button (click)="lastPage()">>|</button>         
+                    }
+                </div>
+            </div>
+            <div id="jump-to-page-cont">
+                <div class="pagination-helper-text">
+                    Current page/Jump To:
+                </div>
+                <select (change)="jumpToPage($event)">
+                    @if(videoDataService.paginatedResult() != null)
+                    {
+                        @for(item of [].constructor(this.videoDataService.paginatedResult()!.pagination!.totalPages!); track $index)
+                        {
+                            @if($index + 1 == this.videoDataService.paginatedResult()!.pagination!.currentPage)
+                            {
+
+                                <option value="{{$index + 1}}" selected>{{$index + 1}}</option>
+                            } @else {
+                                <option value="{{$index + 1}} ">{{$index + 1}}</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        
+    </div>
+</div>

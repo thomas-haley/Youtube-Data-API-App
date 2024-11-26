@@ -6,47 +6,37 @@ import { UserVideoData } from '../../../_models/userVideoData';
 import { TableHeader } from '../../../_models/tableHeader';
 import { VideoListItemComponent } from "./video-list-item/video-list-item.component";
 import { CommonModule } from '@angular/common';
+import { PaginationComponent } from './pagination/pagination.component';
+import { EditableTableHeaderComponent } from "./editable-table-header/editable-table-header.component";
 @Component({
   selector: 'app-video-list',
   standalone: true,
-  imports: [VideoListItemComponent, CommonModule],
+  imports: [PaginationComponent, CommonModule, EditableTableHeaderComponent],
   templateUrl: './video-list.component.html',
   styleUrl: './video-list.component.css'
 })
+
+
 export class VideoListComponent {
   @Input() listType!: string;
   accountService = inject(AccountService);
   userSessionService = inject(UserSessionService);
   videoDataService = inject(VideoDataService);
-  testSrc = signal<string | null>(null);
-  pageNumber = 1;
-  pageSize = 5;
-  defaultHeaders = [
-    {name: "Date Watched", visibleInHeader: true, location: "watched"} as TableHeader,
-    {name: "Video Thumbnail", visibleInHeader: false, location: "video.thumbnail"} as TableHeader,
-    {name: "Video Title", visibleInHeader: true, location: "video.title"} as TableHeader,
-    {name: "Channel Thumbnail", visibleInHeader: false, location: "video.channel.thumbnail"} as TableHeader,
-    {name: "Channel ", visibleInHeader: true, location: "video.channel.title"} as TableHeader
-  ];
-  tableHeaders = signal<TableHeader[] | null>(null);
+  allowHeaderEdit = signal<boolean>(false);
 
   ngOnInit()
   {
-    
     if(!this.videoDataService.paginatedResult()) this.listType == "user-videos" ? this.loadUserVideo() : null;
-    if(!this.tableHeaders()) this.tableHeaders.set(this.defaultHeaders); //eventually get last used headers
+    if(!this.videoDataService.tableHeaders()) this.videoDataService.tableHeaders.set(this.videoDataService.defaultHeaders); //eventually get last used headers
   }
 
   loadUserVideo(){
-    this.videoDataService.getUserVideos(this.userSessionService.sessionFlags()!.id, this.pageNumber, this.pageSize);
-  }
-  test2(){
-    console.log("here");
+    this.videoDataService.getUserVideos(this.userSessionService.sessionFlags()!.id);
   }
 
   stringifyHeaders(): string
   {
-    var test = JSON.stringify(this.tableHeaders());
+    var test = JSON.stringify(this.videoDataService.tableHeaders());
     return test;
   }
 
@@ -80,9 +70,9 @@ export class VideoListComponent {
     return keys.indexOf("channel") == -1 ? "video-thumbnail" : "channel-thumbnail";
   }
 
-  test(){
-    // var test = [];
-    // test.find
-    // console.log(this.videoDataService.paginatedResult().items![0].find(h => h.field == ""));
+  toggleHeaderEditFlag()
+  {
+    this.allowHeaderEdit.set(!this.allowHeaderEdit());
   }
+
 }

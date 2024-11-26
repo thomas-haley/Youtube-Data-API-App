@@ -21,13 +21,40 @@ td img{
 
 }
 
-div.channel-thumbnail{
-	display:grid;
+
+td.table-channel-img-sm div{
+    display:grid;
 	align-items:center;
 	justify-items:center;
 }
 
-img.channel-thumbnail{
-	border-radius: 50%;
+td.table-channel-img-sm div img{
+    border-radius: 50%;
 	width: 25%;
+}
+
+div.table-container{
+    display: flex;
+    /* overflow-y: scroll; */
+    overflow-x: auto;
+}
+
+
+.table-height-constraint-80vh{
+    max-height: 80vh;
+}
+
+.flex{
+    display: flex;
+}
+
+
+.header{
+    position: sticky;
+    top: 0;
+}
+
+
+.test{
+    height: auto;
 }

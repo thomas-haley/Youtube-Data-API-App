@@ -1,60 +1,91 @@
-<div>
+<div class="mt-2 mb-2">
     <!--Bar above table holding options for table setup, filtering, and pagination-->
+    <app-pagination (onTableSettingsClick)="toggleHeaderEditFlag()" (onPaginationDataUpdate)="loadUserVideo()">
+
+    </app-pagination>
 
 </div>
 <!-- <div class="table"> -->
+    <div class="table-container table-height-constraint-80vh">
 
-    <table class="table">
-        @if(this.tableHeaders() != null && videoDataService.paginatedResult() != null)
-        {
-            <thead>
-                <tr>
-                    @for(header of this.tableHeaders(); track $index)
-                    {
-                        <th scope="col" class="{{getLastPathKey(header.location)}} header-{{header.visibleInHeader.valueOf()}}">
-                        @if(header.visibleInHeader){
-                            <p>{{header.name}}</p>    
-                        }
-                        </th>     
-                    }
-                    
-                </tr>
-            </thead>
-            <tbody>
-                @for(video of videoDataService.paginatedResult()!.items; track $index){
+        
+        <table class="table table-striped">
+            @if(this.videoDataService.tableHeaders() != null && videoDataService.paginatedResult() != null)
+            {
+                <thead>
                     <tr>
-
-
-
-
-
-
-                    @if(!tableHeaders() )
-                    {
-                        Loading
-                    } @else {
-                        @for(headerValue of tableHeaders(); track $index)
+                        @for(header of this.videoDataService.tableHeaders(); track $index)
                         {
- 
-                            <td class="{{getLastPathKey(headerValue.location)}}">
-                                @switch (getLastPathKey(headerValue.location)) {
-                                    @case ("thumbnail") {
-                                        <div class="{{getThumbnailCSSClass(headerValue.location)}}">
-                                            <img class="{{getThumbnailCSSClass(headerValue.location)}}" src="{{getNestedValue(video, headerValue.location)}}">
-                                        </div>
-                                    }
-                                    @default {
-                                        {{getNestedValue(video, headerValue.location)}}                      
-                                    }
+                            @if(this.allowHeaderEdit())
+                            {
+                                <th>
+                                    <app-editable-table-header headerIndexString={{$index}}></app-editable-table-header>
+                                </th>
+                            } @else {
+                                <th scope="col" class="{{getLastPathKey(header.location)}} header header-{{header.visibleInHeader.valueOf()}}">
+                                @if(header.visibleInHeader){
+                                    <p>{{header.name}}</p>    
                                 }
-                            </td>
-                            
-
+                                </th>     
+                            }
                         }
-                    }
-
-
+                        
                     </tr>
+                </thead>
+                <tbody class="test">
+                    @for(video of videoDataService.paginatedResult()!.items; track $index){
+                        <tr>
+
+
+
+
+
+
+                        @if(!videoDataService.tableHeaders() )
+                        {
+                            Loading
+                        } @else {
+                            @for(headerValue of videoDataService.tableHeaders(); track $index)
+                            {
+    
+                                <td class="{{headerValue.customDataCSSClass}}">
+                                    @if(headerValue.hasHref)
+                                    {
+                                        <a target="_blank" href="{{headerValue.href(video)}}">
+                                            @switch (getLastPathKey(headerValue.location)) {
+                                                @case ("thumbnail") {
+                                                    <div>
+                                                        <img src="{{getNestedValue(video, headerValue.location)}}">
+                                                    </div>
+                                                }
+                                                @default {
+                                                    {{getNestedValue(video, headerValue.location)}}                      
+                                                }
+                                            }
+                                        </a>
+                                    } @else {
+                                        @switch (getLastPathKey(headerValue.location)) {
+                                            @case ("thumbnail") {
+                                                <div>
+                                                    <img src="{{getNestedValue(video, headerValue.location)}}">
+                                                </div>
+                                            }
+                                            @default {
+                                                {{getNestedValue(video, headerValue.location)}}                      
+                                            }
+                                        }
+                                    }
+                                    
+
+                                
+                                </td>
+                                
+
+                            }
+                        }
+
+
+                        </tr>
 
 
 
@@ -66,15 +97,16 @@
 
 
 
-                    <!-- <tr > -->
-                    <!-- <app-video-list-item [stringIndex]="i.toString()" [headersString]="stringifyHeaders()"></app-video-list-item> -->
-                    <!-- </tr> -->
+                        <!-- <tr > -->
+                        <!-- <app-video-list-item [stringIndex]="i.toString()" [headersString]="stringifyHeaders()"></app-video-list-item> -->
+                        <!-- </tr> -->
 
 
-                    <!-- <app-video-list-item stringIndex={{$index}}  headersString={{stringifyHeaders()}}></app-video-list-item> -->
-                    <!-- </tr> -->
-                }
-            </tbody>
-        }
-    </table>
+                        <!-- <app-video-list-item stringIndex={{$index}}  headersString={{stringifyHeaders()}}></app-video-list-item> -->
+                        <!-- </tr> -->
+                    }
+                </tbody>
+            }
+        </table>
+    </div>
 <!-- </div> -->
