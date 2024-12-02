@@ -13,5 +13,6 @@ public interface IUserVideoRepository
 
     bool CreateUserVideo(AppUserVideos user);
 
-    Task<PagedList<UserVideoDataDTO>> GetUserVideosAsync(UserVideoParams userVideoParams, int userID);
+    Task<PagedList<UserVideoDataDTO>> GetUserVideosAsync(UserVideoParams userVideoParams, int userID, UserVideoFilters? userVideoFilters);
+    public IQueryable<AppUserVideos> FilterQuery(IQueryable<AppUserVideos> query, UserVideoFilters videoFilters);
 }

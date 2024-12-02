@@ -80,11 +80,86 @@ public class UserVideoRepository(DataContext context, IMapper mapper) : IUserVid
         return await this.ChannelExistsByAPIID(apiID);
     }
 
-        public async Task<PagedList<UserVideoDataDTO>> GetUserVideosAsync(UserVideoParams userVideoParams, int userID)
+        public async Task<PagedList<UserVideoDataDTO>> GetUserVideosAsync(UserVideoParams userVideoParams, int userID, UserVideoFilters? userVideoFilters)
     {   
-        var query = context.UserVideos.Include(uv => uv.Video.Channel).Include(uv => uv.Video.Category).Where(uv => uv.User.Id == userID).Distinct().ProjectTo<UserVideoDataDTO>(mapper.ConfigurationProvider);
+        var query = context.UserVideos.Include(uv => uv.Video.Channel).Include(uv => uv.Video.Category).Where(uv => uv.User.Id == userID);
+
+        if(userVideoFilters != null)
+        {
+            query = this.FilterQuery(query, userVideoFilters);
+        }
+
+        var projectedQuery = query.Distinct().ProjectTo<UserVideoDataDTO>(mapper.ConfigurationProvider);
+
+        return await PagedList<UserVideoDataDTO>.CreateAsync(projectedQuery, userVideoParams.PageNumber, userVideoParams.PageSize);
+    }
 
 
-        return await PagedList<UserVideoDataDTO>.CreateAsync(query, userVideoParams.PageNumber, userVideoParams.PageSize);
+    public IQueryable<AppUserVideos> FilterQuery(IQueryable<AppUserVideos> query, UserVideoFilters videoFilters)
+    {
+        if(videoFilters.Channel != null)
+        {
+            query = query.Where<AppUserVideos>(uv => uv.Video.Channel!.Id == videoFilters.Channel);
+        }
+
+        if(videoFilters.DateWatchedStart != null)
+        {
+            var dws = DateTime.Parse(videoFilters.DateWatchedStart);
+            query = query.Where<AppUserVideos>(uv => uv.Watched >= dws);
+        }
+
+        if(videoFilters.DateWatchedEnd != null)
+        {
+            var dwe = DateTime.Parse(videoFilters.DateWatchedEnd);
+            query = query.Where<AppUserVideos>(uv => uv.Watched <= dwe);
+        }
+
+        if(videoFilters.PublishedStart != null)
+        {
+            var ps = DateTime.Parse(videoFilters.PublishedStart);
+            query = query.Where<AppUserVideos>(uv => uv.Video.Published >= ps);
+        }
+
+        if(videoFilters.PublishedEnd != null)
+        {
+            var pe = DateTime.Parse(videoFilters.PublishedEnd);
+            query = query.Where<AppUserVideos>(uv => uv.Video.Published <= pe);
+        }
+
+        //TODO: Add duration filter here once you figure out how you want to split the data (Maybe separate days, hours, minutes, seconds cols?)
+
+        if(videoFilters.Views != null)
+        {
+            var viewsSplit = videoFilters.Views.Split("_");
+            var filterViews = int.Parse(viewsSplit[1]);
+            switch(viewsSplit[0]) // Switch on operator of videoFilters.Views
+            {
+                case "<":
+                    query = query.Where<AppUserVideos>(uv => uv.Video.Views == null ? false : uv.Video.Views < filterViews);
+                    break;
+                case ">":
+                    query = query.Where<AppUserVideos>(uv => uv.Video.Views == null ? false : uv.Video.Views > filterViews);
+                    break;
+                case "<=":
+                    query = query.Where<AppUserVideos>(uv => uv.Video.Views == null ? false : uv.Video.Views <= filterViews);
+                    break;
+                case ">=":
+                    query = query.Where<AppUserVideos>(uv => uv.Video.Views == null ? false : uv.Video.Views >= filterViews);
+                    break;
+                case "=":
+                    query = query.Where<AppUserVideos>(uv => uv.Video.Views == null ? false : uv.Video.Views == filterViews);
+                    break;
+                default: //Default skips
+                    break;
+
+            }
+        }
+
+        if(videoFilters.Category != null)
+        {
+            query = query.Where<AppUserVideos>(uv => uv.Video.CategoryId == videoFilters.Category);
+        }
+
+        return query;
     }
 }

@@ -78,9 +78,9 @@ public class UsersController(IUnitOfWork unitOfWork, IHTMLFileParser fileParser,
 
     [AllowAnonymous]
     [HttpGet("{id:int}/videos")]
-    public async Task<ActionResult<IEnumerable<UserVideoDataDTO>>> GetUsersVideos([FromQuery]UserVideoParams userVideoParams, int id)
+    public async Task<ActionResult<IEnumerable<UserVideoDataDTO>>> GetUsersVideos([FromQuery]UserVideoParams userVideoParams, [FromQuery] UserVideoFilters videoFilters,  int id)
     {
-        var userVideos =  await unitOfWork.UserVideoRepository.GetUserVideosAsync(userVideoParams, id);
+        var userVideos =  await unitOfWork.UserVideoRepository.GetUserVideosAsync(userVideoParams, id, videoFilters);
         Response.AddPaginationHeader(userVideos);
         return Ok(userVideos);
     }
