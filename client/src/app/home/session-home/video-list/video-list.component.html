@@ -1,6 +1,7 @@
 <div class="mt-2 mb-2">
+    <app-filters (shouldUpdateTableContents)="loadUserVideo()" class="z-0" [showFilters]="displayFilters"></app-filters>
     <!--Bar above table holding options for table setup, filtering, and pagination-->
-    <app-pagination [isEditingTable]="this.allowHeaderEdit()"  (onTableSettingsClick)="toggleHeaderEditFlag()" (onPaginationDataUpdate)="loadUserVideo()">
+    <app-pagination class="z-1" [isEditingTable]="this.allowHeaderEdit()" (onFilterButtonClick)="toggleShowFilters()"  (onTableSettingsClick)="toggleHeaderEditFlag()" (onPaginationDataUpdate)="loadUserVideo()">
 
     </app-pagination>
 

@@ -6,11 +6,20 @@ import { NavComponent } from "./nav/nav.component";
 import { AccountService } from './_services/account.service';
 import { HomeComponent } from "./home/home.component";
 import { ErrorService } from './_services/error.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { MAT_DATEPICKER_SCROLL_STRATEGY } from '@angular/material/datepicker';
+import { Overlay } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavComponent, HomeComponent],
+  imports: [
+    RouterOutlet, 
+    NavComponent, 
+    // BrowserModule,
+    // BrowserAnimationsModule
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

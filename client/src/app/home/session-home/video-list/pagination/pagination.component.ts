@@ -10,6 +10,7 @@ import { VideoDataService } from '../../../../_services/video-data.service';
 export class PaginationComponent {
   @Output() onPaginationDataUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onTableSettingsClick: EventEmitter<any> = new EventEmitter();
+  @Output() onFilterButtonClick: EventEmitter<any> = new EventEmitter();
   @Input() updateDataCallback!: Function;
   @Input() isEditingTable!: boolean;
   videoDataService = inject(VideoDataService);
@@ -125,4 +126,8 @@ export class PaginationComponent {
     this.onTableSettingsClick.emit();
   }
 
+  public triggerOnFilterButtonClick()
+  {
+    this.onFilterButtonClick.emit();
+  }
 }

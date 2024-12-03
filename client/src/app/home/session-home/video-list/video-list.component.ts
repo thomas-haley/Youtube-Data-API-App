@@ -8,12 +8,14 @@ import { VideoListItemComponent } from "./video-list-item/video-list-item.compon
 import { CommonModule } from '@angular/common';
 import { PaginationComponent } from './pagination/pagination.component';
 import { EditableTableHeaderComponent } from "./editable-table-header/editable-table-header.component";
+import { FiltersComponent } from "./filters/filters.component";
 @Component({
   selector: 'app-video-list',
   standalone: true,
-  imports: [PaginationComponent, CommonModule, EditableTableHeaderComponent],
+  imports: [PaginationComponent, CommonModule, EditableTableHeaderComponent, FiltersComponent],
   templateUrl: './video-list.component.html',
-  styleUrl: './video-list.component.css'
+  styleUrl: './video-list.component.css',
+
 })
 
 
@@ -23,6 +25,7 @@ export class VideoListComponent {
   userSessionService = inject(UserSessionService);
   videoDataService = inject(VideoDataService);
   allowHeaderEdit = signal<boolean>(false);
+  displayFilters = signal<boolean>(false);
 
   ngOnInit()
   {
@@ -73,6 +76,11 @@ export class VideoListComponent {
   toggleHeaderEditFlag()
   {
     this.allowHeaderEdit.set(!this.allowHeaderEdit());
+  }
+
+  toggleShowFilters()
+  {
+    this.displayFilters.update(state => !state);
   }
 
   parseTopic(topicURL: string)

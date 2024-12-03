@@ -1,7 +1,7 @@
 <div class="p-2" id="pagination-row">
     <div class="left-just" id="left-span">
         <div id="filters-button-cont">
-            <button>Filters</button>
+            <button (click)="triggerOnFilterButtonClick()">Filters</button>
         </div>
         <div id="header-settings-button-cont">
             @if(!this.isEditingTable)

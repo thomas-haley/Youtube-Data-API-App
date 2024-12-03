@@ -37,4 +37,10 @@ public class CategoryRepository(DataContext context) : ICategoryRepository
     public int CountIncompleteCategories(){
         return context.Categories.Where(cat => cat.Category == null).Count();
     }
+
+
+    public async Task<IEnumerable<AppCategory?>> GetAllUserCategoriesAsync(int id)
+    {
+        return await context.UserVideos.Where(uv => uv.UserId == id).Select(uv => uv.Video.Category).Where(cat => cat != null).Distinct().ToListAsync();
+    }
 }

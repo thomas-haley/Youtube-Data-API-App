@@ -6,6 +6,7 @@ import { from, map } from 'rxjs';
 import { PaginatedResult } from '../_models/pagination';
 import { VideoData } from '../_models/videoData';
 import { TableHeader } from '../_models/tableHeader';
+import { TableFilter } from '../_models/tableFilter';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,7 @@ export class VideoDataService {
   defaultHeaders = [this.possibleHeaders[0], this.possibleHeaders[1], this.possibleHeaders[2], this.possibleHeaders[3], this.possibleHeaders[4]];
   tableHeaders = signal<TableHeader[] | null>(this.defaultHeaders);
 
+  tableFilters = signal<TableFilter[]>([]);
 
 
 
@@ -43,8 +45,10 @@ export class VideoDataService {
     let params = new HttpParams();
 
     params = params.append('pageNumber', this.pageNumber()).append('pageSize',  this.pageSize());
-    
-
+    for(let i = 0; i < this.tableFilters().length; i++)
+    {
+      params = params.append(this.tableFilters()[i].key, this.tableFilters()[i].value);
+    }
 
     return this.http.get<UserVideoData[]>(this.baseUrl + "users/"+ id +"/videos", {observe: "response", params}).subscribe({
       next: response => {
@@ -122,5 +126,50 @@ export class VideoDataService {
     clonedHeaders.splice(toIndex, 0, elementToMove);
 
     this.tableHeaders.set(clonedHeaders);
+  }
+
+
+
+
+  updateFilter(key: string, value: string)
+  {
+    let iToUpdate = this.findFilterIndex(key);
+    if(iToUpdate != -1)
+    {
+      let clone = this.tableFilters();
+      if(clone[iToUpdate].key == key)
+      {
+        clone[iToUpdate].value = value;
+      }
+    } else {
+      let clone = this.tableFilters();
+      let newFilter: TableFilter = {
+        key: key,
+        value: value
+      };
+      clone.push(newFilter)
+    }
+  }
+
+  removeFilter(key: string)
+  {
+    let iToRemove = this.findFilterIndex(key);
+
+    if(iToRemove != -1)
+    {
+      let clone = this.tableFilters();
+      clone.splice(iToRemove, 1);
+      this.tableFilters.set(clone);
+    }
+  }
+
+  findFilterIndex(key: string): number
+  {
+    for(let i = 0; i < this.tableFilters().length; i++)
+    {
+      if(this.tableFilters()[i].key == key) return i;
+    }
+
+    return -1;
   }
 }

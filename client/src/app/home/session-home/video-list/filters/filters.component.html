@@ -1,0 +1,115 @@
+<div class="filter-container" [@slideInOut]="showFilters() ? 'true' : 'false'">
+    <div id="dw-cont" class="border-container">
+        <p class="border-container-header">Date Watched</p>
+        <div id="dw-s-cont date-picker-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Start Period</mat-label>
+                <input matInput [matDatepicker]="pickerWS"
+                [(ngModel)]="watchedStart"
+                (ngModelChange)="setDateFilter('DateWatchedStart', watchedStart ?? null)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="pickerWS"></mat-datepicker-toggle>
+                <mat-datepicker #pickerWS></mat-datepicker>
+              </mat-form-field>
+        </div>
+        <div id="dw-e-cont">
+            <mat-form-field appearance="fill">
+                <mat-label>End Period</mat-label>
+                <input matInput [matDatepicker]="pickerWE"
+                [(ngModel)]="watchedEnd"
+                (ngModelChange)="setDateFilter('DateWatchedEnd', watchedEnd ?? null)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="pickerWE"></mat-datepicker-toggle>
+                <mat-datepicker #pickerWE></mat-datepicker>
+              </mat-form-field>
+        </div>
+    </div>
+    <div id="pub-cont" class="border-container">
+        <p class="border-container-header">Date Published</p>
+        <div id="dw-s-cont date-picker-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Start Period</mat-label>
+                <input matInput [matDatepicker]="pickerPS"
+                [(ngModel)]="publishedStart"
+                (ngModelChange)="setDateFilter('PublishedStart', publishedStart ?? null)"
+                />
+                <mat-datepicker-toggle matSuffix [for]="pickerPS"></mat-datepicker-toggle>
+                <mat-datepicker #pickerPS></mat-datepicker>
+              </mat-form-field>
+        </div>
+        <div id="dw-e-cont">
+            <mat-form-field appearance="fill" matNativeControl>
+                <mat-label>End Period</mat-label>
+                <input matInput 
+                [matDatepicker]="pickerPE"
+                [(ngModel)]="publishedEnd"
+                (ngModelChange)="setDateFilter('PublishedEnd', publishedEnd ?? null)"
+                />
+                <mat-datepicker-toggle matIconSuffix [for]="pickerPE"></mat-datepicker-toggle>
+                <mat-datepicker #pickerPE></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="autocomp-cont border-container">
+        <!-- <p class="border-container-header"></p> -->
+        <form class="example-form">
+            @if(filterCategories() != null)
+            {
+                <mat-form-field class="example-full-width">
+                    <mat-label>Filter By Category</mat-label>
+                    <input type="text"
+                            placeholder="Pick one"
+                            aria-label="Filter By Category"
+                            matInput
+                            [formControl]="categoryAutoController"
+                            [matAutocomplete]="autoCategory">
+
+                    <mat-autocomplete #autoCategory="matAutocomplete" [displayWith]="categoryDisplayFn">
+                            @for (cat of acFilteredCategories | async; track cat) {
+                            <mat-option [value]="cat">{{cat.id.toString()}}</mat-option>
+                            }   
+                    </mat-autocomplete>
+                </mat-form-field>
+            }
+          </form>
+          <form class="example-form">
+            @if(filterChannels() != null)
+            {
+                <mat-form-field class="example-full-width">
+                    <mat-label>Filter By Channel</mat-label>
+                    <input type="text"
+                            placeholder="Pick one"
+                            aria-label="Filter By Channel"
+                            matInput
+                            [formControl]="channelAutoController"
+                            [matAutocomplete]="autoChannel">
+
+                    <mat-autocomplete #autoChannel="matAutocomplete" [displayWith]="channelDisplayFn">
+                            @for (channel of acFilteredChannels | async; track channel) {
+                            <mat-option [value]="channel">{{channel.title}}</mat-option>
+                            }   
+                    </mat-autocomplete>
+                </mat-form-field>
+            }
+          </form>
+    </div>
+    <div id="view-cont" class="view-cont border-container">
+        <p class="border-container-header">Views</p>    
+        <mat-form-field>
+            <mat-label></mat-label>
+            <mat-select [(value)]="selectedViewOpt">
+                @for (option of viewOpts; track $index) {
+                    <mat-option [value]="option">{{option}}</mat-option>
+                    }  
+            </mat-select>
+
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label># Views</mat-label>
+            <input matInput
+                [(ngModel)]="views"
+                (ngModelChange)="setViewFilter()"
+            >
+          </mat-form-field>
+    </div>
+</div>
