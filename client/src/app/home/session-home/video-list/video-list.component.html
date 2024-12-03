@@ -1,15 +1,141 @@
+<div class="mt-2 mb-2">
+    <app-filters (shouldUpdateTableContents)="loadUserVideo()" class="z-0" [showFilters]="displayFilters"></app-filters>
+    <!--Bar above table holding options for table setup, filtering, and pagination-->
+    <app-pagination class="z-1" [isEditingTable]="this.allowHeaderEdit()" (onFilterButtonClick)="toggleShowFilters()"  (onTableSettingsClick)="toggleHeaderEditFlag()" (onPaginationDataUpdate)="loadUserVideo()">
 
+    </app-pagination>
 
+</div>
+<!-- <div class="table"> -->
+    <div class="table-container table-height-constraint-80vh">
 
-@if(userSessionService.userVideoData() != null){
-    <button (click)="test()">test</button>
-    @if(testSrc != null)
-    {
-        <img src={{testSrc()}}>
-    }
-    
-    @for(video of userSessionService.userVideoData()!; track $index)
-    {
         
-    }
-}
+        <table class="table table-striped">
+            @if(this.videoDataService.tableHeaders() != null && videoDataService.paginatedResult() != null)
+            {
+                <thead>
+                    <tr>
+                        @for(header of this.videoDataService.tableHeaders(); track $index)
+                        {
+                            @if(this.allowHeaderEdit())
+                            {
+                                <th>
+                                    <app-editable-table-header  id="editable-test-{{$index}}"  headerIndexString={{$index}}></app-editable-table-header>
+                                </th>
+                            } @else {
+                                <th scope="col" class="{{getLastPathKey(header.location)}} header header-{{header.visibleInHeader.valueOf()}}">
+                                @if(header.visibleInHeader){
+                                    <p>{{header.name}}</p>    
+                                }
+                                </th>     
+                            }
+                        }
+                        
+                    </tr>
+                </thead>
+                <tbody class="test">
+                    @for(video of videoDataService.paginatedResult()!.items; track $index){
+                        <tr>
+
+
+
+
+
+
+                        @if(!videoDataService.tableHeaders() )
+                        {
+                            Loading
+                        } @else {
+                            @for(headerValue of videoDataService.tableHeaders(); track $index)
+                            {
+    
+                                <td class="{{headerValue.customDataCSSClass}}">
+                                    @if(headerValue.hasHref)
+                                    {
+                                        <a target="_blank" href="{{headerValue.href(video)}}">
+                                            @switch (getLastPathKey(headerValue.location)) {
+                                                @case ("thumbnail") {
+                                                    <div>
+                                                        <img src="{{getNestedValue(video, headerValue.location)}}">
+                                                    </div>
+                                                }
+                                                @case("topics"){
+                                                    @if(getNestedValue(video, headerValue.location) == null){
+                                                        <div>
+                                                            N/A
+                                                        </div>
+                                                    } @else {
+                                                        @for(topic of getNestedValue(video, headerValue.location); track $index)
+                                                        {
+                                                            <div>
+                                                                <a target="_blank" href="{{topic}}">{{this.parseTopic(topic)}}</a>@if($index + 1 < getNestedValue(video, headerValue.location).length){,}
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                                @default {
+                                                    {{getNestedValue(video, headerValue.location)}}                      
+                                                }
+                                            }
+                                        </a>
+                                    } @else {
+                                        @switch (getLastPathKey(headerValue.location)) {
+                                            @case ("thumbnail") {
+                                                <div>
+                                                    <img src="{{getNestedValue(video, headerValue.location)}}">
+                                                </div>
+                                            }
+                                            @case("topics"){
+                                                @if(getNestedValue(video, headerValue.location) == null){
+                                                    <div>
+                                                        N/A
+                                                    </div>
+                                                } @else {
+                                                    @for(topic of getNestedValue(video, headerValue.location); track $index)
+                                                    {
+                                                        <div>
+                                                            <a target="_blank" href="{{topic}}">{{this.parseTopic(topic)}}</a>@if($index + 1 < getNestedValue(video, headerValue.location).length){,}
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+                                            @default {
+                                                {{getNestedValue(video, headerValue.location)}}                      
+                                            }
+                                        }
+                                    }
+                                    
+
+                                
+                                </td>
+                                
+
+                            }
+                        }
+
+
+                        </tr>
+
+
+
+
+
+
+
+
+
+
+
+                        <!-- <tr > -->
+                        <!-- <app-video-list-item [stringIndex]="i.toString()" [headersString]="stringifyHeaders()"></app-video-list-item> -->
+                        <!-- </tr> -->
+
+
+                        <!-- <app-video-list-item stringIndex={{$index}}  headersString={{stringifyHeaders()}}></app-video-list-item> -->
+                        <!-- </tr> -->
+                    }
+                </tbody>
+            }
+        </table>
+    </div>
+<!-- </div> -->

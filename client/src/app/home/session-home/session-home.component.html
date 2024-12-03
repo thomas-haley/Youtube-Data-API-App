@@ -1,5 +1,3 @@
-<p>session-home works!</p>
-
 @if(sessionService.sessionFlags() != null){
     @if(sessionService.sessionFlags()?.dataUploaded){
         <!--Banner showing quick stats, banner should be customizable within itself-->
@@ -8,7 +6,7 @@
 
 
         <!--Video List for user, should be filterable by itself-->
-        <app-video-list></app-video-list>
+        <app-video-list listType="user-videos"></app-video-list>
     } @else {
         <app-file-upload></app-file-upload>
     }

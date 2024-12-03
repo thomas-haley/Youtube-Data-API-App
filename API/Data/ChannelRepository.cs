@@ -54,4 +54,10 @@ public class ChannelRepository(DataContext context) : IChannelRepository
 
         return true;
     }
+
+
+    public async Task<IEnumerable<AppChannel?>> GetAllUserChannelsAsync(int id)
+    {
+        return await context.UserVideos.Where(uv => uv.UserId == id).Select(uv => uv.Video.Channel).Distinct().ToListAsync();
+    }
 }

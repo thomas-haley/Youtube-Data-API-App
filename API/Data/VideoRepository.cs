@@ -50,7 +50,7 @@ public class VideoRepository(DataContext context, IMapper _mapper) : IVideoRepos
             }
         
             if(videoItem.Statistics != null) {
-                dbVideo.Views = videoItem.Statistics.ViewCount.ToString();
+                dbVideo.Views = int.Parse(videoItem.Statistics.ViewCount.ToString()!);
             }
 
             if(videoItem.ContentDetails != null) {

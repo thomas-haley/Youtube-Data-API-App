@@ -1,0 +1,16 @@
+.flex{
+   display: flex; 
+}
+
+.test-cont{
+    width: 100%;
+    background-color: lightgray;
+    border-radius: 16px;
+    padding: 8px;
+}
+
+.img-cont{
+    justify-content: center;
+    display: flex;
+    height: 70%;
+}

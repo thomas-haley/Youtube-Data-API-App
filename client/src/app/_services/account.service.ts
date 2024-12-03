@@ -27,7 +27,6 @@ export class AccountService {
 
   test(){
     return this.http.get(this.baseUrl + "users/2").subscribe((res) => {
-      console.log(res);
     })
   }
 

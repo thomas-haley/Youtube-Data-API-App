@@ -1,0 +1,44 @@
+@if(this.videoService.tableHeaders() != null)
+{
+    @if(this.headerData() != null)
+    {
+
+    
+    <div class="editable-header-action-container">
+        <div class="editable-header-select-container">
+            <!-- {{this.videoService.tableHeaders()[this.headerIndex()!]}} -->
+            <select class="form-select" (change)="updateHeaderColumn($event)" id="editable-table-header-{{this.headerIndex()}}">
+                @for(possibleHeader of this.videoService.possibleHeaders; track $index)
+                {
+                    @if(isSameHeader(possibleHeader))
+                    {
+                        <option value="{{$index}}" selected>{{possibleHeader.name}}</option>
+                    } @else {
+                        <option value="{{$index}}">{{possibleHeader.name}}</option>
+                    }
+                }
+            </select>
+    
+        </div>
+        <div class="editable-header-button-container">
+            <div class="header-move-btn-cont">
+                @if(this.headerIndex() != 0)
+                {
+                    <button class="btn btn-default" (click)="moveHeaderLeft()"><i class="bi-arrow-left"></i></button>
+                }
+            </div>
+
+            <button class="btn btn-danger trash-button" (click)="removeHeaderColumnWrapper(this.headerIndex()!)"><i class="bi-trash trash-button-icon"></i></button>
+            
+            <div class="header-move-btn-cont">
+                @if(this.headerIndex()! + 1  != this.videoService.tableHeaders()!.length)
+                {
+                    <button class="btn btn-default"  (click)="moveHeaderRight()"><i class="bi-arrow-right"></i></button>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    }
+}

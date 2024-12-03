@@ -1,0 +1,16 @@
+tr{
+    max-height: 10%;
+    max-height: 100px;
+}
+
+td{
+    overflow: hidden;
+}
+td.thumbnail {
+    max-height: 5vh;
+}
+
+.thumbnail img{
+    max-height: 5vh;
+    object-fit: contain;
+}

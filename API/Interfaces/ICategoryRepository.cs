@@ -14,4 +14,6 @@ public interface ICategoryRepository
     public AppCategory CreateFromVideoItem(Video videoItem);
 
     public int CountIncompleteCategories();
+
+    public Task<IEnumerable<AppCategory?>> GetAllUserCategoriesAsync(int id);
 }

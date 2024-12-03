@@ -1,5 +1,6 @@
 using API.Data;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,8 +50,8 @@ public class ErrorController(IYoutubeAPIService youtubeAPIService) : BaseAPICont
 
     //Internal Server Error
     [HttpGet("test")]
-    public ActionResult TestEndpoint(){
-        youtubeAPIService.ListVideos([]);
+    public ActionResult TestEndpoint([FromQuery]UserVideoParams userVideoParams){
+        // youtubeAPIService.ListVideos([]);
         return Ok();
         // throw new Exception("Test endpoint");
     }

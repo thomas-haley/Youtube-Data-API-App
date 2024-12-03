@@ -1,3 +1,4 @@
+using System.Globalization;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
@@ -78,10 +79,31 @@ public class UsersController(IUnitOfWork unitOfWork, IHTMLFileParser fileParser,
 
     [AllowAnonymous]
     [HttpGet("{id:int}/videos")]
-    public async Task<ActionResult<IEnumerable<UserVideoDataDTO>>> GetUsersVideos([FromQuery]UserVideoParams userVideoParams, int id)
+    public async Task<ActionResult<IEnumerable<UserVideoDataDTO>>> GetUsersVideos([FromQuery]UserVideoParams userVideoParams, [FromQuery] UserVideoFilters videoFilters,  int id)
     {
-        var userVideos =  await unitOfWork.UserVideoRepository.GetUserVideosAsync(userVideoParams, id);
+        var userVideos =  await unitOfWork.UserVideoRepository.GetUserVideosAsync(userVideoParams, id, videoFilters);
         Response.AddPaginationHeader(userVideos);
+        return Ok(userVideos);
+    }
+
+
+    [HttpGet("channels/all")]
+    public async Task<ActionResult<IEnumerable<ChannelDataDTO>>> GetAllUserChannels()
+    {
+        var idString = HttpContext.User.FindFirst("id")?.Value;
+        if(idString == null) return BadRequest("Invalid user id");
+        var userVideos =  await unitOfWork.ChannelRepository.GetAllUserChannelsAsync(Int32.Parse(idString));
+        return Ok(userVideos);
+    }
+
+
+
+    [HttpGet("categories/all")]
+    public async Task<ActionResult<IEnumerable<ChannelDataDTO>>> GetAllUserCategories()
+    {
+        var idString = HttpContext.User.FindFirst("id")?.Value;
+        if(idString == null) return BadRequest("Invalid user id");
+        var userVideos =  await unitOfWork.CategoryRepository.GetAllUserCategoriesAsync(Int32.Parse(idString));
         return Ok(userVideos);
     }
 }

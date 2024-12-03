@@ -15,5 +15,5 @@ public interface IChannelRepository
     public Task<AppChannel?> GetByApiIdAsync(string apiID);
 
     public Task<bool> UpsertAPIChannelItem(Channel apiChannel);
-    
+    public Task<IEnumerable<AppChannel?>> GetAllUserChannelsAsync(int id);
 }
